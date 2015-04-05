@@ -1,0 +1,44 @@
+{
+  "name": "pimatic-solarview",
+  "description": "Pimatic Plugin for SolarView (SV), a data logger for PV systems",
+  "author": {
+    "name": "Marcus Wittig",
+    "url": "https://github.com/mwittig/pimatic-solarview"
+  },
+  "main": "solarview",
+  "files": [
+    "solarview.coffee",
+    "README.md",
+    "solarview-config-schema.coffee",
+    "device-config-schema.coffee",
+    "LICENSE"
+  ],
+  "version": "0.0.1",
+  "homepage": "https://github.com/mwittig/pimatic-solarview",
+  "keywords": [
+    "pimatic",
+    "SolarView",
+    "solar",
+    "SmartHome",
+    "SmartMeter",
+    "Volkszaehler",
+    "Monitoring"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mwittig/pimatic-solarview.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mwittig/pimatic-solarview/issues"
+  },
+  "configSchema": "solarview-config-schema.coffee",
+  "dependencies": {
+  },
+  "peerDependencies": {
+    "pimatic": "0.8.*"
+  },
+  "engines": {
+    "node": ">0.8.x",
+    "npm": ">1.1.x"
+  }
+}
