@@ -69,3 +69,6 @@ History
     
 * 20150406, V0.0.2
     * Removed some test code. Fixed typo
+
+* 20150406, V0.0.3
+    * NPM issues. Removed npm-debug.log
