@@ -17,7 +17,7 @@ To be able to read the SV data records with pimatic-solarview, the TCP-Server op
 `-TCP <port>` option to the SV start script. See section *TCP-Server* of the SV Installation Manual.
 
 You can load the plugin by editing your `config.json` to include the following in the `plugins` section. The properties
-`host` and `port` denote the hostname (or IP address) and port of the SV TCP server. The property `ìnterval` specifies 
+`host` and `port` denote the hostname (or IP address) and port of the SV TCP server. The property `interval` specifies 
 the time interval in seconds for updating the data set.   
 
     { 
@@ -55,7 +55,7 @@ English) will be highly appreciated. There are a few things I am planning to add
 
 * Add support for additional meter points, for example, for an additional power meter to monitoring the in-house 
   consumption of solar energy.
-* Currently, the update cycles also runs at night. This could be limited to day light hours even though the load
+* Currently, the update cycles also runs at night. This could be limited to daylight hours even though the load
   caused by the update cycles should be fairly low.
 * Possibly add localized names for attributes if this is supported by pimatic.
 * Improve error handling.
@@ -66,3 +66,6 @@ History
 
 * 20150406, V0.0.1
     * Initial Version
+    
+* 20150406, V0.0.2
+    * Removed some test code. Fixed typo

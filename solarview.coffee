@@ -88,7 +88,7 @@ module.exports = (env) ->
         if error.code == 'ETIMEDOUT'
           env.logger.error("Timeout fetching SolarView data")
         else
-          env.logger.error("Error fetching SolarView data")
+          env.logger.error("Error fetching SolarView data: " + error.toString())
 
 
     # poll device according to interval
@@ -136,10 +136,10 @@ module.exports = (env) ->
       env.logger.debug("SolarViewInverterSimpleDevice Initialization")
 
       @on 'solarViewData', ((values) ->
-        @emit "energyToday", Number values[6] if Number values[6] > 0.0
-        @emit "energyMonth", Number values[7] if Number values[6] > 0.0
-        @emit "energyYear", Number values[8] if Number values[6] > 0.0
-        @emit "energyTotal", Number values[9] if Number values[6] > 0.0
+        @emit "energyToday", Number values[6]
+        @emit "energyMonth", Number values[7]
+        @emit "energyYear", Number values[8]
+        @emit "energyTotal", Number values[9]
         @emit "currentPower", Number values[10]
       )
       super(@config, @plugin)
