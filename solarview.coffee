@@ -47,13 +47,14 @@ module.exports = (env) ->
   class SolarViewInverterBaseDevice extends env.devices.Device
     # Initialize device by reading entity definition from middleware
     constructor: (@config, @plugin) ->
-      env.logger.debug("SolarViewInverterBaseDevice Initialization")
+      env.logger.debug("SolarViewInverterBaseDevice Initialization") if @debug
       @host = plugin.config.host
       @port = plugin.config.port
       @id = config.id
       @name = config.name
       @interval = 1000 * (config.interval or plugin.config.interval)
       @inverterId = config.inverterId
+      @debug  = plugin.config.debug;
       super()
 
       # keep updating
@@ -68,12 +69,13 @@ module.exports = (env) ->
       socket = net.createConnection port, host
       socket.setNoDelay true
 
-      socket.on 'connect', () ->
-        env.logger.debug("Opened connection to #{host}:#{port}.")
+      socket.on 'connect', (() ->
+        env.logger.debug("Opened connection to #{host}:#{port}.") if @debug
         socket.write "0" + inverterId + "*\r\n"
+      ).bind(@)
 
       socket.on 'data', ((data) ->
-        env.logger.debug("Received raw data: #{data}")
+        env.logger.debug("Received raw data: #{data}") if @debug
 
         rawData = data.toString 'utf8'
         values = rawData.split ","
@@ -133,7 +135,7 @@ module.exports = (env) ->
 
     # Initialize device by reading entity definition from middleware
     constructor: (@config, @plugin) ->
-      env.logger.debug("SolarViewInverterSimpleDevice Initialization")
+      env.logger.debug("SolarViewInverterSimpleDevice Initialization") if @debug
 
       @on 'solarViewData', ((values) ->
         @emit "energyToday", Number values[6]
@@ -201,12 +203,12 @@ module.exports = (env) ->
 
     # Initialize device by reading entity definition from middleware
     constructor: (@config, @plugin) ->
-      env.logger.debug("SolarViewInverterDevice Initialization")
+      env.logger.debug("SolarViewInverterDevice Initialization") if @debug
 
       @on 'solarViewData', ((values) ->
         @emit "gridVoltage", Number values[17]
         @emit "gridAmperage", Number values[18]
-        @emit "inverterTemperature", Number values[19].replace /\}+$/g, ""
+        @emit "inverterTemperature", Number values[19].replace /}+$/g, ""
       )
       super(@config, @plugin)
 
@@ -299,7 +301,7 @@ module.exports = (env) ->
 
     # Initialize device by reading entity definition from middleware
     constructor: (@config, @plugin) ->
-      env.logger.debug("SolarViewInverterWithMPPTrackerDevice Initialization")
+      env.logger.debug("SolarViewInverterWithMPPTrackerDevice Initialization") if @debug
 
       @on 'solarViewData', ((values) ->
         @emit "dcVoltageStringA", Number values[11]

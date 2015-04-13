@@ -18,7 +18,8 @@ To be able to read the SV data records with pimatic-solarview, the TCP-Server op
 
 You can load the plugin by editing your `config.json` to include the following in the `plugins` section. The properties
 `host` and `port` denote the hostname (or IP address) and port of the SV TCP server. The property `interval` specifies 
-the time interval in seconds for updating the data set.   
+the time interval in seconds for updating the data set. For debugging purposes you may set property `debug` to true. 
+This will write additional debug messages to the pimatic log.
 
     { 
        "plugin": "solarview"
@@ -36,7 +37,7 @@ Then you need to add a device in the `devices` section. The plugin offers three 
 * SolarViewInverterWithMPPTracker: This type of device is for PV systems with a MPP tracking system. It
   additionally provides you with data on voltage and amperage for up to three DC strings.
   
-As part of the device definition you need to provide the inverterId which is a digit `[0-9]` to identify the number of 
+As part of the device definition you need to provide the `inverterId` which is a digit `[0-9]` to identify the number of 
 the inverter attached to the SV logger (see example below). The digit `0`depicts the sum of all inverters attached to 
 the SV logger. 
 
@@ -66,9 +67,9 @@ History
 
 * 20150406, V0.0.1
     * Initial Version
-    
 * 20150406, V0.0.2
     * Removed some test code. Fixed typo
-
 * 20150406, V0.0.3
     * NPM issues. Removed npm-debug.log
+* 20150413, V0.0.4
+    * Added debugging feature. Reduced logging output in normal mode. Updated README

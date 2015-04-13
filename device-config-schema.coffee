@@ -1,5 +1,5 @@
 module.exports = {
-  title: "SolarView"
+  title: "pimatic-solarview device config schemas"
   SolarViewInverterSimple: {
     title: "SolarView Inverter Simplified View"
     description: "Provides energy earnings and current power values. Use this for the sum if you more than one inverter"

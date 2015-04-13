@@ -15,4 +15,8 @@ module.exports = {
       description: "Polling interval for data requests"
       type: "number"
       default: 10
+    debug:
+      description: "Debug mode. Writes debug message to the piamtic log"
+      type: "boolean"
+      default: false
 }
