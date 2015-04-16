@@ -97,6 +97,11 @@ module.exports = (env) ->
     requestUpdate: ->
       @fetchData(@host, @port, @inverterId)
 
+    _setAttribute: (attributeName, value) ->
+      if @[attributeName] isnt value
+        @[attributeName] = value
+        @emit attributeName, value
+
 
   class SolarViewInverterSimpleDevice extends SolarViewInverterBaseDevice
     # attributes
@@ -138,11 +143,11 @@ module.exports = (env) ->
       env.logger.debug("SolarViewInverterSimpleDevice Initialization") if @debug
 
       @on 'solarViewData', ((values) ->
-        @emit "energyToday", Number values[6]
-        @emit "energyMonth", Number values[7]
-        @emit "energyYear", Number values[8]
-        @emit "energyTotal", Number values[9]
-        @emit "currentPower", Number values[10]
+        @_setAttribute('energyToday', Number values[6])
+        @_setAttribute('energyMonth', Number values[7])
+        @_setAttribute('energyYear', Number values[8])
+        @_setAttribute('energyTotal', Number values[9])
+        @_setAttribute('currentPower', Number values[10])
       )
       super(@config, @plugin)
 
@@ -206,9 +211,9 @@ module.exports = (env) ->
       env.logger.debug("SolarViewInverterDevice Initialization") if @debug
 
       @on 'solarViewData', ((values) ->
-        @emit "gridVoltage", Number values[17]
-        @emit "gridAmperage", Number values[18]
-        @emit "inverterTemperature", Number values[19].replace /}+$/g, ""
+        @_setAttribute('gridVoltage', Number values[17])
+        @_setAttribute('gridAmperage', Number values[18])
+        @_setAttribute('inverterTemperature', Number values[19].replace /}+$/g, "")
       )
       super(@config, @plugin)
 
@@ -304,12 +309,12 @@ module.exports = (env) ->
       env.logger.debug("SolarViewInverterWithMPPTrackerDevice Initialization") if @debug
 
       @on 'solarViewData', ((values) ->
-        @emit "dcVoltageStringA", Number values[11]
-        @emit "dcAmperageStringA", Number values[12]
-        @emit "dcVoltageStringB", Number values[13]
-        @emit "dcAmperageStringB", Number values[14]
-        @emit "dcVoltageStringC", Number values[15]
-        @emit "dcAmperageStringC", Number values[16]
+        @_setAttribute('dcVoltageStringA', Number values[11])
+        @_setAttribute('dcAmperageStringA', Number values[12])
+        @_setAttribute('dcVoltageStringB', Number values[13])
+        @_setAttribute('dcAmperageStringB', Number values[14])
+        @_setAttribute('dcVoltageStringC', Number values[15])
+        @_setAttribute('dcAmperageStringC', Number values[16])
       )
       super(@config, @plugin)
 

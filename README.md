@@ -73,3 +73,6 @@ History
     * NPM issues. Removed npm-debug.log
 * 20150413, V0.0.4
     * Added debugging feature. Reduced logging output in normal mode. Updated README
+* 20150416, V0.0.5
+    * Improved attribute change. Now, a change event is triggered only, if a value has actually changed rather than
+          triggering the change event at each interval
