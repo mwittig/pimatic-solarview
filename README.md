@@ -17,11 +17,11 @@ Screenshots
 
 ### Example of the device display as provided by the SolarViewInverterSimple
 
-![screenshot](https://raw.githubusercontent.com/mwittig/pimatic-solarview/master/screenshots/screenshot1.png)
+![screenshot](https://raw.githubusercontent.com/mwittig/pimatic-solarview/master/screenshots/solarview-screenshot1.png)
 
 ### Example of the customizable graph utility provided by the pimatic frontend 
 
-![screenshot](https://raw.githubusercontent.com/mwittig/pimatic-solarview/master/screenshots/screenshot2.png)
+![screenshot](https://raw.githubusercontent.com/mwittig/pimatic-solarview/master/screenshots/solarview-screenshot2.png)
 
 
 Configuration
