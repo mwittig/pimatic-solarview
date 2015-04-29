@@ -9,7 +9,7 @@ A [pimatic](http://pimatic.org) Plugin for SolarView (SV), a data logger for PV 
 * English homepage: <http://www.solarview.info/Solarlogger_en.aspx>
 
 SV is capable of gathering data from up to 9 inverters and additional meter points which may be 
-used to monitoring the in-house consumption of solar energy, for example. SV is a vendor-neutral solution which supports
+used to monitor the in-house consumption of solar energy, for example. SV is a vendor-neutral solution which supports
 a large number of inverter models from various vendors. It is available for Fritz!Box, Raspberry PI, and Windows.
 
 Screenshots
@@ -52,7 +52,7 @@ Then you need to add a device in the `devices` section. The plugin offers three 
   additionally provides you with data on voltage and amperage for up to three DC strings.
   
 As part of the device definition you need to provide the `inverterId` which is a digit `[0-9]` to identify the number of 
-the inverter attached to the SV logger (see example below). The digit `0`depicts the sum of all inverters attached to 
+the inverter attached to the SV logger (see example below). The digit `0` depicts the sum of all inverters attached to 
 the SV logger. 
 
     {
@@ -64,7 +64,7 @@ the SV logger.
 
 *Hints*: If you wish to hide some attributes this is possible with pimatic v0.8.68 and higher using the 
  ```xAttributeOptions``` property as shown in the following example. Using the ```xLink``` property you can also 
- add hyperlink to the device display.
+ add a hyperlink to the device display.
       
     {
         "id": "sv1",
