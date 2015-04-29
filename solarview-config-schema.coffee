@@ -16,7 +16,7 @@ module.exports = {
       type: "number"
       default: 10
     debug:
-      description: "Debug mode. Writes debug message to the piamtic log"
+      description: "Debug mode. Writes debug message to the pimatic log"
       type: "boolean"
       default: false
 }

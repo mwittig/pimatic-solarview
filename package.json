@@ -13,16 +13,18 @@
     "device-config-schema.coffee",
     "LICENSE"
   ],
-  "version": "0.0.5",
+  "version": "0.0.6",
   "homepage": "https://github.com/mwittig/pimatic-solarview",
   "keywords": [
     "pimatic",
     "SolarView",
-    "solar",
+    "Solar Energy",
+    "Photovolatics",
     "SmartHome",
     "SmartMeter",
     "Volkszaehler",
-    "Monitoring"
+    "Monitoring",
+    "Metering"
   ],
   "repository": {
     "type": "git",
@@ -31,6 +33,12 @@
   "bugs": {
     "url": "https://github.com/mwittig/pimatic-solarview/issues"
   },
+  "licenses": [
+    {
+      "type": "GPLv2",
+      "url": "https://github.com/mwittig/pimatic-solarview/blob/master/LICENSE"
+    }
+  ],
   "configSchema": "solarview-config-schema.coffee",
   "dependencies": {
   },

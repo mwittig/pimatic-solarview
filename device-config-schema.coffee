@@ -4,6 +4,7 @@ module.exports = {
     title: "SolarView Inverter Simplified View"
     description: "Provides energy earnings and current power values. Use this for the sum if you more than one inverter"
     type: "object"
+    extensions: ["xLink", "xAttributeOptions"]
     properties:
       inverterId:
         description: "Inverter Id [0 - 9], use 0 for the sum of all inverters"
@@ -14,6 +15,7 @@ module.exports = {
     title: "SolarView Inverter"
     description: "Additionally provides grid voltage, grid amperage, and inverter temperature values"
     type: "object"
+    extensions: ["xLink", "xAttributeOptions"]
     properties:
       inverterId:
         description: "Inverter Id [1 - 9]"
@@ -24,6 +26,7 @@ module.exports = {
     title: "SolarView Inverter with MPP Tracker"
     description: "Additionally provides string voltage and amperage for three MPP trackers"
     type: "object"
+    extensions: ["xLink", "xAttributeOptions"]
     properties:
       inverterId:
         description: "Inverter Id [1 - 9]"

@@ -1,7 +1,9 @@
 pimatic-solarview
 =================
 
-Pimatic Plugin for SolarView (SV), a data logger for PV systems:    
+[![npm version](https://badge.fury.io/js/pimatic-solarview.svg)](http://badge.fury.io/js/pimatic-solarview)
+
+A [pimatic](http://pimatic.org) Plugin for SolarView (SV), a data logger for PV systems:    
 
 * German homepage: <http://www.solarview.info>
 * English homepage: <http://www.solarview.info/Solarlogger_en.aspx>
@@ -9,6 +11,18 @@ Pimatic Plugin for SolarView (SV), a data logger for PV systems:
 SV is capable of gathering data from up to 9 inverters and additional meter points which may be 
 used to monitoring the in-house consumption of solar energy, for example. SV is a vendor-neutral solution which supports
 a large number of inverter models from various vendors. It is available for Fritz!Box, Raspberry PI, and Windows.
+
+Screenshots
+-----------
+
+### Example of the device display as provided by the SolarViewInverterSimple
+
+![screenshot](https://raw.githubusercontent.com/mwittig/pimatic-solarview/master/screenshots/screenshot1.png)
+
+### Example of the customizable graph utility provided by the pimatic frontend 
+
+![screenshot](https://raw.githubusercontent.com/mwittig/pimatic-solarview/master/screenshots/screenshot2.png)
+
 
 Configuration
 -------------
@@ -44,23 +58,40 @@ the SV logger.
     {
         "id": "sv1",
         "class": "SolarViewInverterSimple",
-        "name": "PV System"
+        "name": "PV System",
         "inverterId": 0
+    }
+
+*Hints*: If you wish to hide some attributes this is possible with pimatic v0.8.68 and higher using the 
+ ```xAttributeOptions``` property as shown in the following example. Using the ```xLink``` property you can also 
+ add hyperlink to the device display.
+      
+    {
+        "id": "sv1",
+        "class": "SolarViewInverterSimple",
+        "name": "PV System",
+        "inverterId": 0,
+        "xLink": "http://fritz.box:88",
+        "xAttributeOptions": [
+            {
+              "name": "currentPower",
+              "hidden": true
+            }
+        ]
     }
     
 TODO
 ----
 
-This is my first project using CoffeeScript. Suggestions for improvements or feedback (correspondence in Deutsch or 
-English) will be highly appreciated. There are a few things I am planning to add in the short term:
+Suggestions for improvements or feedback (correspondence in Deutsch or English) will be highly appreciated. 
+
+There are a few things I am planning to add in the short term:
 
 * Add support for additional meter points, for example, for an additional power meter to monitoring the in-house 
   consumption of solar energy.
 * Currently, the update cycles also runs at night. This could be limited to daylight hours even though the load
   caused by the update cycles should be fairly low.
 * Possibly add localized names for attributes if this is supported by pimatic.
-* Improve error handling.
-* Add generated documentation (need to familiarize myself with the tooling)
 
 History
 -------
@@ -76,3 +107,7 @@ History
 * 20150416, V0.0.5
     * Improved attribute change. Now, a change event is triggered only, if a value has actually changed rather than
           triggering the change event at each interval
+* 20150429, V0.0.6
+    * Added license section in `package.json`. 
+    * Added support for xLink and xAttributeOptions as part of the device configuration
+    * Fixed some typos, added version badge, added screenshots
