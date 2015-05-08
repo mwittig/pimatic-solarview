@@ -15,11 +15,11 @@ a large number of inverter models from various vendors. It is available for Frit
 Screenshots
 -----------
 
-### Example of the device display as provided by the SolarViewInverterSimple
+Example of the device display as provided by the SolarViewInverterSimple
 
 ![screenshot](https://raw.githubusercontent.com/mwittig/pimatic-solarview/master/screenshots/solarview-screenshot1.png)
 
-### Example of the customizable graph utility provided by the pimatic frontend 
+Example of the customizable graph utility provided by the pimatic frontend 
 
 ![screenshot](https://raw.githubusercontent.com/mwittig/pimatic-solarview/master/screenshots/solarview-screenshot2.png)
 
@@ -83,13 +83,11 @@ the SV logger.
 TODO
 ----
 
-Suggestions for improvements or feedback (correspondence in Deutsch or English) will be highly appreciated. 
-
 There are a few things I am planning to add in the short term:
 
 * Add support for additional meter points, for example, for an additional power meter to monitoring the in-house 
   consumption of solar energy.
-* Currently, the update cycles also runs at night. This could be limited to daylight hours even though the load
+* Currently, the update cycles also run at night. This could be limited to daylight hours even though the load
   caused by the update cycles should be fairly low.
 * Possibly add localized names for attributes if this is supported by pimatic.
 
@@ -111,3 +109,5 @@ History
     * Added license section in `package.json`. 
     * Added support for xLink and xAttributeOptions as part of the device configuration
     * Fixed some typos, added version badge, added screenshots
+* 20150509, V0.0.7
+    * Bug fix: destroy socket on error to release socket descriptor

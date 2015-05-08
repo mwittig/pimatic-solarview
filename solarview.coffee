@@ -69,12 +69,12 @@ module.exports = (env) ->
       socket = net.createConnection port, host
       socket.setNoDelay true
 
-      socket.on 'connect', (() ->
+      socket.on 'connect', (() =>
         env.logger.debug("Opened connection to #{host}:#{port}.") if @debug
         socket.write "0" + inverterId + "*\r\n"
-      ).bind(@)
+      )
 
-      socket.on 'data', ((data) ->
+      socket.on 'data', ((data) =>
         env.logger.debug("Received raw data: #{data}") if @debug
 
         rawData = data.toString 'utf8'
@@ -84,13 +84,14 @@ module.exports = (env) ->
           @emit "solarViewData", values
 
         socket.end()
-      ).bind(@)
+      )
 
       socket.on 'error', (error) ->
         if error.code == 'ETIMEDOUT'
           env.logger.error("Timeout fetching SolarView data")
         else
           env.logger.error("Error fetching SolarView data: " + error.toString())
+        socket.destroy()
 
 
     # poll device according to interval
