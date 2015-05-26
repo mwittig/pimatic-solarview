@@ -5,15 +5,23 @@
     "name": "Marcus Wittig",
     "url": "https://github.com/mwittig/pimatic-solarview"
   },
+  "contributors": [
+    {
+      "name": "Marcus Wittig",
+      "url": "https://github.com/mwittig"
+    }
+  ],
   "main": "solarview",
   "files": [
+    "screenshots/solarview-screenshot1.png",
+    "screenshots/solarview-screenshot2.png",
     "solarview.coffee",
     "README.md",
     "solarview-config-schema.coffee",
     "device-config-schema.coffee",
     "LICENSE"
   ],
-  "version": "0.0.7",
+  "version": "0.0.8",
   "homepage": "https://github.com/mwittig/pimatic-solarview",
   "keywords": [
     "pimatic",

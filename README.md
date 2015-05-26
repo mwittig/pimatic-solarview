@@ -111,3 +111,6 @@ History
     * Fixed some typos, added version badge, added screenshots
 * 20150509, V0.0.7
     * Bug fix: destroy socket on error to release socket descriptor
+* 20150526, V0.0.8
+    * Reduced error log output. If "debug" is not set on the plugin, only new error states will be logged
+    * Minor changes

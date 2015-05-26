@@ -55,6 +55,7 @@ module.exports = (env) ->
       @interval = 1000 * (config.interval or plugin.config.interval)
       @inverterId = config.inverterId
       @debug  = plugin.config.debug;
+      @_lastError = ""
       super()
 
       # keep updating
@@ -81,6 +82,7 @@ module.exports = (env) ->
         values = rawData.split ","
 
         if values.length >= 20
+          @_lastError = ""
           @emit "solarViewData", values
 
         socket.end()
@@ -88,9 +90,11 @@ module.exports = (env) ->
 
       socket.on 'error', (error) ->
         if error.code == 'ETIMEDOUT'
-          env.logger.error("Timeout fetching SolarView data")
+          newError = "Timeout fetching SolarView data"
         else
-          env.logger.error("Error fetching SolarView data: " + error.toString())
+          newError = "Error fetching SolarView data: " + error.toString()
+        env.logger.error newError if @_lastError isnt newError or @debug
+        @_lastError = newError
         socket.destroy()
 
 
@@ -118,7 +122,7 @@ module.exports = (env) ->
         unit: 'kWh'
         acronym: 'KMT'
       energyYear:
-        description: "Energy Yield if Current Year"
+        description: "Energy Yield of Current Year"
         type: "number"
         unit: 'kWh'
         acronym: 'KYR'
