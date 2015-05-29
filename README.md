@@ -114,3 +114,7 @@ History
 * 20150526, V0.0.8
     * Reduced error log output. If "debug" is not set on the plugin, only new error states will be logged
     * Minor changes
+* 20150529, V0.0.9
+    * Fixed bug controlling the error output
+    * Added socket timeout handling to avoid a large number of pending sockets if TCP timeout applies and the 
+      interval is shorter than the TCP timeout

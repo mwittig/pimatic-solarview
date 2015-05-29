@@ -47,14 +47,15 @@ module.exports = (env) ->
   class SolarViewInverterBaseDevice extends env.devices.Device
     # Initialize device by reading entity definition from middleware
     constructor: (@config, @plugin) ->
+      @debug  = plugin.config.debug;
       env.logger.debug("SolarViewInverterBaseDevice Initialization") if @debug
       @host = plugin.config.host
       @port = plugin.config.port
       @id = config.id
       @name = config.name
       @interval = 1000 * (config.interval or plugin.config.interval)
+      @timeout = Math.min @interval, 20000
       @inverterId = config.inverterId
-      @debug  = plugin.config.debug;
       @_lastError = ""
       super()
 
@@ -69,6 +70,7 @@ module.exports = (env) ->
     fetchData: (host, port, inverterId) ->
       socket = net.createConnection port, host
       socket.setNoDelay true
+      socket.setTimeout @timeout
 
       socket.on 'connect', (() =>
         env.logger.debug("Opened connection to #{host}:#{port}.") if @debug
@@ -88,12 +90,19 @@ module.exports = (env) ->
         socket.end()
       )
 
-      socket.on 'error', (error) ->
+      socket.on 'error', (error) =>
         if error.code == 'ETIMEDOUT'
           newError = "Timeout fetching SolarView data"
         else
           newError = "Error fetching SolarView data: " + error.toString()
+
         env.logger.error newError if @_lastError isnt newError or @debug
+        @_lastError = newError
+        socket.destroy()
+
+      socket.on 'timeout', () =>
+        newError = "Timeout fetching SolarView data"
+        env.logger.error newError if (@_lastError isnt newError) or @debug
         @_lastError = newError
         socket.destroy()
 
