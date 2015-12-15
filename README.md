@@ -94,4 +94,4 @@ There are a few things I am planning to add in the short term:
 History
 -------
 
-# See [Release History}(https://github.com/mwittig/pimatic-solarview/blob/master/HISTORY.md)
+# See [Release History](https://github.com/mwittig/pimatic-solarview/blob/master/HISTORY.md)
