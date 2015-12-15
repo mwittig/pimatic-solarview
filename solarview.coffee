@@ -8,6 +8,9 @@ module.exports = (env) ->
   # Require the nodejs net API
   net = require 'net'
 
+  # Require pimatic-plugin-commons for common helper functions
+  commons = require('pimatic-plugin-commons')(env)
+
   # ###SolarViewPlugin class
   class SolarViewPlugin extends env.plugins.Plugin
 
@@ -47,76 +50,71 @@ module.exports = (env) ->
   class SolarViewInverterBaseDevice extends env.devices.Device
     # Initialize device by reading entity definition from middleware
     constructor: (@config, @plugin) ->
-      @debug  = plugin.config.debug;
-      env.logger.debug("SolarViewInverterBaseDevice Initialization") if @debug
+      @debug = @plugin.config.debug || false
+      @_base = commons.base @, config.class      
+      @_base.debug("SolarViewInverterBaseDevice Initialization")
       @host = plugin.config.host
       @port = plugin.config.port
       @id = config.id
       @name = config.name
-      @interval = 1000 * (config.interval or plugin.config.interval)
+      @interval = @_base.normalize 10000, 1000 * (config.interval or plugin.config.interval or 10)
       @timeout = Math.min @interval, 20000
       @inverterId = config.inverterId
-      @_lastError = ""
       super()
-
-      # keep updating
-      @requestUpdate()
-      setInterval(=>
+      process.nextTick () =>
         @requestUpdate()
-      , @interval
-      )
 
 
     fetchData: (host, port, inverterId) ->
-      socket = net.createConnection port, host
-      socket.setNoDelay true
-      socket.setTimeout @timeout
+      return new Promise (resolve, reject) =>
+        @_base.debug "Trying to connect to #{@host}:#{@port}"
+        socket = net.createConnection port, host
+        socket.setNoDelay true
+        socket.setTimeout @timeout
 
-      socket.on 'connect', (() =>
-        env.logger.debug("Opened connection to #{host}:#{port}.") if @debug
-        socket.write "0" + inverterId + "*\r\n"
-      )
+        socket.on 'connect', (() =>
+          @_base.debug("Connected to #{host}:#{port}.")
+          socket.write "0" + inverterId + "*\r\n"
+        )
 
-      socket.on 'data', ((data) =>
-        env.logger.debug("Received raw data: #{data}") if @debug
+        socket.on 'data', ((data) =>
+          @_base.debug("Received raw data:", data)
 
-        rawData = data.toString 'utf8'
-        values = rawData.split ","
+          rawData = data.toString 'utf8'
+          values = rawData.split ","
 
-        if values.length >= 20
-          @_lastError = ""
-          @emit "solarViewData", values
+          if values.length >= 20
+            @_base.resetLastError()
+            @emit "solarViewData", values
 
-        socket.end()
-      )
+          socket.end()
+          resolve()
+        )
 
-      socket.on 'error', (error) =>
-        if error.code == 'ETIMEDOUT'
+        socket.on 'error', (error) =>
+          if error.code == 'ETIMEDOUT'
+            newError = "Timeout fetching SolarView data"
+          else
+            newError = "Error fetching SolarView data: " + error.toString()
+
+          socket.destroy()
+          reject newError
+
+        socket.once 'timeout', () =>
           newError = "Timeout fetching SolarView data"
-        else
-          newError = "Error fetching SolarView data: " + error.toString()
-
-        env.logger.error newError if @_lastError isnt newError or @debug
-        @_lastError = newError
-        socket.destroy()
-
-      socket.on 'timeout', () =>
-        newError = "Timeout fetching SolarView data"
-        env.logger.error newError if (@_lastError isnt newError) or @debug
-        @_lastError = newError
-        socket.destroy()
+          socket.destroy()
+          reject newError
 
 
     # poll device according to interval
     requestUpdate: ->
       @fetchData(@host, @port, @inverterId)
+        .catch (error) =>
+          @_base.error error
+        .finally () =>
+          @_base.scheduleUpdate @requestUpdate, @interval
 
-    _setAttribute: (attributeName, value) ->
-      if @[attributeName] isnt value
-        @[attributeName] = value
-        @emit attributeName, value
-
-
+    
   class SolarViewInverterSimpleDevice extends SolarViewInverterBaseDevice
     # attributes
     attributes:
@@ -154,16 +152,16 @@ module.exports = (env) ->
 
     # Initialize device by reading entity definition from middleware
     constructor: (@config, @plugin) ->
-      env.logger.debug("SolarViewInverterSimpleDevice Initialization") if @debug
+      super(@config, @plugin)
+      @_base.debug("SolarViewInverterSimpleDevice Initialization")
 
       @on 'solarViewData', ((values) ->
-        @_setAttribute('energyToday', Number values[6])
-        @_setAttribute('energyMonth', Number values[7])
-        @_setAttribute('energyYear', Number values[8])
-        @_setAttribute('energyTotal', Number values[9])
-        @_setAttribute('currentPower', Number values[10])
+        @_base.setAttribute('energyToday', Number values[6])
+        @_base.setAttribute('energyMonth', Number values[7])
+        @_base.setAttribute('energyYear', Number values[8])
+        @_base.setAttribute('energyTotal', Number values[9])
+        @_base.setAttribute('currentPower', Number values[10])
       )
-      super(@config, @plugin)
 
     getEnergyToday: -> Promise.resolve @energyToday
     getEnergyMonth: -> Promise.resolve @energyMonth
@@ -222,14 +220,14 @@ module.exports = (env) ->
 
     # Initialize device by reading entity definition from middleware
     constructor: (@config, @plugin) ->
-      env.logger.debug("SolarViewInverterDevice Initialization") if @debug
+      super(@config, @plugin)
+      @_base.debug("SolarViewInverterDevice Initialization")
 
       @on 'solarViewData', ((values) ->
-        @_setAttribute('gridVoltage', Number values[17])
-        @_setAttribute('gridAmperage', Number values[18])
-        @_setAttribute('inverterTemperature', Number values[19].replace /}+$/g, "")
+        @_base.setAttribute('gridVoltage', Number values[17])
+        @_base.setAttribute('gridAmperage', Number values[18])
+        @_base.setAttribute('inverterTemperature', Number values[19].replace /}+$/g, "")
       )
-      super(@config, @plugin)
 
     getGridVoltage: -> Promise.resolve @gridVoltage
     getGridAmperage: -> Promise.resolve @gridAmperage
@@ -320,17 +318,17 @@ module.exports = (env) ->
 
     # Initialize device by reading entity definition from middleware
     constructor: (@config, @plugin) ->
-      env.logger.debug("SolarViewInverterWithMPPTrackerDevice Initialization") if @debug
+      super(@config, @plugin)
+      @_base.debug("SolarViewInverterWithMPPTrackerDevice Initialization")
 
       @on 'solarViewData', ((values) ->
-        @_setAttribute('dcVoltageStringA', Number values[11])
-        @_setAttribute('dcAmperageStringA', Number values[12])
-        @_setAttribute('dcVoltageStringB', Number values[13])
-        @_setAttribute('dcAmperageStringB', Number values[14])
-        @_setAttribute('dcVoltageStringC', Number values[15])
-        @_setAttribute('dcAmperageStringC', Number values[16])
+        @_base.setAttribute('dcVoltageStringA', Number values[11])
+        @_base.setAttribute('dcAmperageStringA', Number values[12])
+        @_base.setAttribute('dcVoltageStringB', Number values[13])
+        @_base.setAttribute('dcAmperageStringB', Number values[14])
+        @_base.setAttribute('dcVoltageStringC', Number values[15])
+        @_base.setAttribute('dcAmperageStringC', Number values[16])
       )
-      super(@config, @plugin)
 
     getDcVoltageStringA: -> Promise.resolve @dcVoltageStringA
     getDcVoltageStringB: -> Promise.resolve @dcVoltageStringB
