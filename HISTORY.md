@@ -28,3 +28,7 @@
     * Moved history to separate file
     * Now using pimatic-plugin-commons helper functions
     * Changed strategy for requesting updates
+* 20160106, V0.8.1    
+    * Bug fix: Fixed handling of attribute values which led to false results in some cases
+    * Added recovery of energyMonth, energyYear, and energyTotal values from database 
+    * Added travis build descriptor

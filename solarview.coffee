@@ -30,26 +30,26 @@ module.exports = (env) ->
 
       @framework.deviceManager.registerDeviceClass("SolarViewInverterSimple", {
         configDef: deviceConfigDef.SolarViewInverterSimple,
-        createCallback: (config) =>
-          return new SolarViewInverterSimpleDevice(config, this)
+        createCallback: (config, lastState) =>
+          return new SolarViewInverterSimpleDevice(config, this, lastState)
       })
 
       @framework.deviceManager.registerDeviceClass("SolarViewInverter", {
         configDef: deviceConfigDef.SolarViewInverter,
-        createCallback: (config) =>
-          return new SolarViewInverterDevice(config, this)
+        createCallback: (config, lastState) =>
+          return new SolarViewInverterDevice(config, this, lastState)
       })
 
       @framework.deviceManager.registerDeviceClass("SolarViewInverterWithMPPTracker", {
         configDef: deviceConfigDef.SolarViewInverterWithMPPTracker,
-        createCallback: (config) =>
-          return new SolarViewInverterWithMPPTrackerDevice(config, this)
+        createCallback: (config, lastState) =>
+          return new SolarViewInverterWithMPPTrackerDevice(config, this, lastState)
       })
 
 
   class SolarViewInverterBaseDevice extends env.devices.Device
     # Initialize device by reading entity definition from middleware
-    constructor: (@config, @plugin) ->
+    constructor: (@config, @plugin, lastState) ->
       @debug = @plugin.config.debug || false
       @_base = commons.base @, config.class      
       @_base.debug("SolarViewInverterBaseDevice Initialization")
@@ -144,16 +144,20 @@ module.exports = (env) ->
         unit: 'W'
         acronym: 'PAC'
 
-    energyToday: 0.0
-    energyMonth: 0.0
-    energyYear: 0.0
-    energyTotal: 0.0
-    currentPower: 0.0
+    _energyToday: 0.0
+    _energyMonth: 0.0
+    _energyYear: 0.0
+    _energyTotal: 0.0
+    _currentPower: 0.0
 
     # Initialize device by reading entity definition from middleware
-    constructor: (@config, @plugin) ->
-      super(@config, @plugin)
+    constructor: (@config, @plugin, lastState) ->
+      super(@config, @plugin, lastState)
       @_base.debug("SolarViewInverterSimpleDevice Initialization")
+
+      @_energyMonth = lastState.energyMonth.value if lastState?.energyMonth?
+      @_energyYear = lastState.energyYear.value if lastState?.energyYear?
+      @_energyTotal = lastState.energyTotal.value if lastState?.energyTotal?
 
       @on 'solarViewData', ((values) ->
         @_base.setAttribute('energyToday', Number values[6])
@@ -163,11 +167,11 @@ module.exports = (env) ->
         @_base.setAttribute('currentPower', Number values[10])
       )
 
-    getEnergyToday: -> Promise.resolve @energyToday
-    getEnergyMonth: -> Promise.resolve @energyMonth
-    getEnergyYear: -> Promise.resolve @energyYear
-    getEnergyTotal: -> Promise.resolve @energyTotal
-    getCurrentPower: -> Promise.resolve @currentPower
+    getEnergyToday: -> Promise.resolve @_energyToday
+    getEnergyMonth: -> Promise.resolve @_energyMonth
+    getEnergyYear: -> Promise.resolve @_energyYear
+    getEnergyTotal: -> Promise.resolve @_energyTotal
+    getCurrentPower: -> Promise.resolve @_currentPower
 
 
   class SolarViewInverterDevice extends SolarViewInverterSimpleDevice
@@ -214,13 +218,13 @@ module.exports = (env) ->
         unit: '°C'
         acronym: 'TKK'
 
-    gridVoltage: 0.0
-    gridAmperage: 0.0
-    inverterTemperature: 0.0
+    _gridVoltage: 0.0
+    _gridAmperage: 0.0
+    _inverterTemperature: 0.0
 
     # Initialize device by reading entity definition from middleware
-    constructor: (@config, @plugin) ->
-      super(@config, @plugin)
+    constructor: (@config, @plugin, lastState) ->
+      super(@config, @plugin, lastState)
       @_base.debug("SolarViewInverterDevice Initialization")
 
       @on 'solarViewData', ((values) ->
@@ -229,9 +233,9 @@ module.exports = (env) ->
         @_base.setAttribute('inverterTemperature', Number values[19].replace /}+$/g, "")
       )
 
-    getGridVoltage: -> Promise.resolve @gridVoltage
-    getGridAmperage: -> Promise.resolve @gridAmperage
-    getInverterTemperature: -> Promise.resolve @inverterTemperature
+    getGridVoltage: -> Promise.resolve @_gridVoltage
+    getGridAmperage: -> Promise.resolve @_gridAmperage
+    getInverterTemperature: -> Promise.resolve @_inverterTemperature
 
 
   class SolarViewInverterWithMPPTrackerDevice extends SolarViewInverterDevice
@@ -309,16 +313,16 @@ module.exports = (env) ->
         unit: 'A',
         acronym: 'IDCC'
 
-    dcVoltageStringA: 0.0
-    dcVoltageStringB: 0.0
-    dcVoltageStringC: 0.0
-    dcAmperageStringA: 0.0
-    dcAmperageStringB: 0.0
-    dcAmperageStringC: 0.0
+    _dcVoltageStringA: 0.0
+    _dcVoltageStringB: 0.0
+    _dcVoltageStringC: 0.0
+    _dcAmperageStringA: 0.0
+    _dcAmperageStringB: 0.0
+    _dcAmperageStringC: 0.0
 
     # Initialize device by reading entity definition from middleware
-    constructor: (@config, @plugin) ->
-      super(@config, @plugin)
+    constructor: (@config, @plugin, lastState) ->
+      super(@config, @plugin, lastState)
       @_base.debug("SolarViewInverterWithMPPTrackerDevice Initialization")
 
       @on 'solarViewData', ((values) ->
@@ -330,12 +334,12 @@ module.exports = (env) ->
         @_base.setAttribute('dcAmperageStringC', Number values[16])
       )
 
-    getDcVoltageStringA: -> Promise.resolve @dcVoltageStringA
-    getDcVoltageStringB: -> Promise.resolve @dcVoltageStringB
-    getDcVoltageStringC: -> Promise.resolve @dcVoltageStringC
-    getDcAmperageStringA: -> Promise.resolve @dcAmperageStringA
-    getDcAmperageStringB: -> Promise.resolve @dcAmperageStringB
-    getDcAmperageStringC: -> Promise.resolve @dcAmperageStringC
+    getDcVoltageStringA: -> Promise.resolve @_dcVoltageStringA
+    getDcVoltageStringB: -> Promise.resolve @_dcVoltageStringB
+    getDcVoltageStringC: -> Promise.resolve @_dcVoltageStringC
+    getDcAmperageStringA: -> Promise.resolve @_dcAmperageStringA
+    getDcAmperageStringB: -> Promise.resolve @_dcAmperageStringB
+    getDcAmperageStringC: -> Promise.resolve @_dcAmperageStringC
 
 
   # ###Finally
