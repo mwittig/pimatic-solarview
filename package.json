@@ -21,7 +21,7 @@
     "device-config-schema.coffee",
     "LICENSE"
   ],
-  "version": "0.8.1",
+  "version": "0.8.2",
   "homepage": "https://github.com/mwittig/pimatic-solarview",
   "keywords": [
     "pimatic",
