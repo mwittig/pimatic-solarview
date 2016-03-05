@@ -2,6 +2,7 @@ pimatic-solarview
 =================
 
 [![npm version](https://badge.fury.io/js/pimatic-solarview.svg)](http://badge.fury.io/js/pimatic-solarview)
+[![Build Status](https://travis-ci.org/mwittig/pimatic-solarview.svg?branch=master)](https://travis-ci.org/mwittig/pimatic-solarview)
 
 A [pimatic](http://pimatic.org) Plugin for SolarView (SV), a data logger for PV systems:    
 
