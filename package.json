@@ -49,7 +49,7 @@
   ],
   "configSchema": "solarview-config-schema.coffee",
   "dependencies": {
-    "pimatic-plugin-commons": "^0.8.4"
+    "pimatic-plugin-commons": "^0.8.7"
   },
   "peerDependencies": {
     "pimatic": "0.8.*"
