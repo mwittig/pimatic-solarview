@@ -32,3 +32,6 @@
     * Bug fix: Fixed handling of attribute values which led to false results in some cases
     * Added recovery of energyMonth, energyYear, and energyTotal values from database 
     * Added travis build descriptor
+* 20160305, V0.8.2    
+    * Dependency Updates
+    * Added travis build badge
