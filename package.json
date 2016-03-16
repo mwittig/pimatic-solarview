@@ -16,10 +16,11 @@
     "screenshots/solarview-screenshot1.png",
     "screenshots/solarview-screenshot2.png",
     "solarview.coffee",
-    "README.md",
     "solarview-config-schema.coffee",
     "device-config-schema.coffee",
-    "LICENSE"
+    "LICENSE",
+    "HISTORY.md",
+    "README.md"
   ],
   "version": "0.8.2",
   "homepage": "https://github.com/mwittig/pimatic-solarview",

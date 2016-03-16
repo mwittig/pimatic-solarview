@@ -35,3 +35,9 @@
 * 20160305, V0.8.2    
     * Dependency Updates
     * Added travis build badge
+* 20160316, V0.8.3    
+    * Bug fix: Fixed fetchData() handler being pending forever if server closes the connection without returning data
+    * Moved release history to separate file
+    * Provide a SPDX 2.0 license identifier as required by npm v2.1 guidelines on 
+      license metadata - see also https://github.com/npm/npm/releases/tag/v2.10.0
+    * Added license info to README
