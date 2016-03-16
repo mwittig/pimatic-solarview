@@ -66,15 +66,22 @@ module.exports = (env) ->
 
 
     fetchData: (host, port, inverterId) ->
-      return new Promise (resolve, reject) =>
+      return fetchPromise = new Promise (resolve, reject) =>
+
         @_base.debug "Trying to connect to #{@host}:#{@port}"
         socket = net.createConnection port, host
         socket.setNoDelay true
         socket.setTimeout @timeout
 
-        socket.on 'connect', (() =>
+        socket.once 'connect', (() =>
           @_base.debug("Connected to #{host}:#{port}.")
           socket.write "0" + inverterId + "*\r\n"
+        )
+
+        socket.once 'close', (() =>
+          @_base.debug("Socket closed")
+          if fetchPromise.isPending()
+            @_base.rejectWithErrorString reject, "No data received from server"
         )
 
         socket.on 'data', ((data) =>
@@ -87,23 +94,23 @@ module.exports = (env) ->
             @_base.resetLastError()
             @emit "solarViewData", values
 
-          socket.end()
+          socket.destroy()
           resolve()
         )
 
-        socket.on 'error', (error) =>
+        socket.on 'error', ((error) =>
           if error.code == 'ETIMEDOUT'
             newError = "Timeout fetching SolarView data"
           else
             newError = "Error fetching SolarView data: " + error.toString()
 
           socket.destroy()
-          reject newError
+          @_base.rejectWithErrorString reject, newError
+        )
 
         socket.once 'timeout', () =>
-          newError = "Timeout fetching SolarView data"
           socket.destroy()
-          reject newError
+          @_base.rejectWithErrorString reject, "Timeout fetching SolarView data"
 
 
     # poll device according to interval
