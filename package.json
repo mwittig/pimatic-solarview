@@ -41,12 +41,7 @@
   "bugs": {
     "url": "https://github.com/mwittig/pimatic-solarview/issues"
   },
-  "licenses": [
-    {
-      "type": "GPLv2",
-      "url": "https://github.com/mwittig/pimatic-solarview/blob/master/LICENSE"
-    }
-  ],
+  "license": "GPL-2.0",
   "configSchema": "solarview-config-schema.coffee",
   "dependencies": {
     "pimatic-plugin-commons": "^0.8.7"
