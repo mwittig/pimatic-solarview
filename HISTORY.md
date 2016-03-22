@@ -41,3 +41,6 @@
     * Provide a SPDX 2.0 license identifier as required by npm v2.1 guidelines on 
       license metadata - see also https://github.com/npm/npm/releases/tag/v2.10.0
     * Added license info to README
+* 20160322, V0.8.4
+    * Fixed compatibility issue with Coffeescript 1.9 as required for pimatic 0.9
+    * Updated peerDependencies property for compatibility with pimatic 0.9

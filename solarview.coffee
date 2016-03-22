@@ -49,17 +49,17 @@ module.exports = (env) ->
 
   class SolarViewInverterBaseDevice extends env.devices.Device
     # Initialize device by reading entity definition from middleware
-    constructor: (@config, @plugin, lastState) ->
-      @debug = @plugin.config.debug || false
-      @_base = commons.base @, config.class      
+    constructor: (@config, plugin, lastState) ->
+      @debug = plugin.config.debug || false
+      @_base = commons.base @, @config.class      
       @_base.debug("SolarViewInverterBaseDevice Initialization")
       @host = plugin.config.host
       @port = plugin.config.port
-      @id = config.id
-      @name = config.name
-      @interval = @_base.normalize 10000, 1000 * (config.interval or plugin.config.interval or 10)
+      @id = @config.id
+      @name = @config.name
+      @interval = @_base.normalize 10000, 1000 * (@config.interval or plugin.config.interval or 10)
       @timeout = Math.min @interval, 20000
-      @inverterId = config.inverterId
+      @inverterId = @config.inverterId
       super()
       process.nextTick () =>
         @requestUpdate()
@@ -158,8 +158,8 @@ module.exports = (env) ->
     _currentPower: 0.0
 
     # Initialize device by reading entity definition from middleware
-    constructor: (@config, @plugin, lastState) ->
-      super(@config, @plugin, lastState)
+    constructor: (@config, plugin, lastState) ->
+      super(@config, plugin, lastState)
       @_base.debug("SolarViewInverterSimpleDevice Initialization")
 
       @_energyMonth = lastState.energyMonth.value if lastState?.energyMonth?
@@ -230,8 +230,8 @@ module.exports = (env) ->
     _inverterTemperature: 0.0
 
     # Initialize device by reading entity definition from middleware
-    constructor: (@config, @plugin, lastState) ->
-      super(@config, @plugin, lastState)
+    constructor: (@config, plugin, lastState) ->
+      super(@config, plugin, lastState)
       @_base.debug("SolarViewInverterDevice Initialization")
 
       @on 'solarViewData', ((values) ->
@@ -328,8 +328,8 @@ module.exports = (env) ->
     _dcAmperageStringC: 0.0
 
     # Initialize device by reading entity definition from middleware
-    constructor: (@config, @plugin, lastState) ->
-      super(@config, @plugin, lastState)
+    constructor: (@config, plugin, lastState) ->
+      super(@config, plugin, lastState)
       @_base.debug("SolarViewInverterWithMPPTrackerDevice Initialization")
 
       @on 'solarViewData', ((values) ->
