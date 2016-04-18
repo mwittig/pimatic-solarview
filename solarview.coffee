@@ -71,7 +71,7 @@ module.exports = (env) ->
       super()
 
     fetchData: (host, port, inverterId) ->
-      return fetchPromise = new Promise (resolve, reject) =>
+      return @fetchPromise = new Promise (resolve, reject) =>
 
         @_base.debug "Trying to connect to #{@host}:#{@port}"
         socket = net.createConnection port, host
@@ -85,7 +85,7 @@ module.exports = (env) ->
 
         socket.once 'close', (() =>
           @_base.debug("Socket closed")
-          if fetchPromise.isPending()
+          if @fetchPromise.isPending()
             @_base.rejectWithErrorString reject, "No data received from server"
         )
 

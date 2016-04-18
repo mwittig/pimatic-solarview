@@ -47,3 +47,5 @@
 * 20160419, V0.8.5
     * Added destroy method to cancel an scheduled update when the device is removed or updated
     * Dependency Updates
+* 20160419, V0.8.6
+    * Fixed code for cancellation of @fetchPromise
