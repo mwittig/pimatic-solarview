@@ -44,3 +44,5 @@
 * 20160322, V0.8.4
     * Fixed compatibility issue with Coffeescript 1.9 as required for pimatic 0.9
     * Updated peerDependencies property for compatibility with pimatic 0.9
+* 20160419, V0.8.5
+    * Added destroy method to cancel an scheduled update when the device is removed or updated

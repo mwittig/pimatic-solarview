@@ -60,10 +60,15 @@ module.exports = (env) ->
       @interval = @_base.normalize 10000, 1000 * (@config.interval or plugin.config.interval or 10)
       @timeout = Math.min @interval, 20000
       @inverterId = @config.inverterId
-      super()
+      @fetchPromise = Promise.resolve()
       process.nextTick () =>
         @requestUpdate()
+      super()
 
+    destroy: () ->
+      @_base.cancelUpdate()
+      @fetchPromise.cancel()
+      super()
 
     fetchData: (host, port, inverterId) ->
       return fetchPromise = new Promise (resolve, reject) =>
@@ -174,6 +179,9 @@ module.exports = (env) ->
         @_base.setAttribute('currentPower', Number values[10])
       )
 
+    destroy: () ->
+      super()
+
     getEnergyToday: -> Promise.resolve @_energyToday
     getEnergyMonth: -> Promise.resolve @_energyMonth
     getEnergyYear: -> Promise.resolve @_energyYear
@@ -239,6 +247,9 @@ module.exports = (env) ->
         @_base.setAttribute('gridAmperage', Number values[18])
         @_base.setAttribute('inverterTemperature', Number values[19].replace /}+$/g, "")
       )
+
+    destroy: () ->
+      super()
 
     getGridVoltage: -> Promise.resolve @_gridVoltage
     getGridAmperage: -> Promise.resolve @_gridAmperage
@@ -340,6 +351,9 @@ module.exports = (env) ->
         @_base.setAttribute('dcVoltageStringC', Number values[15])
         @_base.setAttribute('dcAmperageStringC', Number values[16])
       )
+
+    destroy: () ->
+      super()
 
     getDcVoltageStringA: -> Promise.resolve @_dcVoltageStringA
     getDcVoltageStringB: -> Promise.resolve @_dcVoltageStringB
