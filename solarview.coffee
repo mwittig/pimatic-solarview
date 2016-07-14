@@ -5,7 +5,7 @@ module.exports = (env) ->
   # Require the bluebird promise library
   Promise = env.require 'bluebird'
 
-  # Require the nodejs net API
+  # Require the Node.js net API
   net = require 'net'
 
   # Require pimatic-plugin-commons for common helper functions
