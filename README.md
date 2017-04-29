@@ -1,6 +1,8 @@
 pimatic-solarview
 =================
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/mwittig/pimatic-solarview.svg)](https://greenkeeper.io/)
+
 [![npm version](https://badge.fury.io/js/pimatic-solarview.svg)](http://badge.fury.io/js/pimatic-solarview)
 [![Build Status](https://travis-ci.org/mwittig/pimatic-solarview.svg?branch=master)](https://travis-ci.org/mwittig/pimatic-solarview)
 
